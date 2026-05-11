@@ -6,10 +6,12 @@ from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import LoginManager
 from flask_migrate import Migrate
+from flask_mail import Mail
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'mysecretkey'
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///app.db'
+app.config['POSTS_PER_PAGE'] = 3
 
 # Email config
 app.config['MAIL_SERVER'] = os.environ.get('MAIL_SERVER')
@@ -23,6 +25,7 @@ db = SQLAlchemy(app)
 migrate = Migrate(app, db)
 login = LoginManager(app)
 login.login_view = 'login'
+mail = Mail(app)
 
 if not app.debug:
     if app.config['MAIL_SERVER']:
