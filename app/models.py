@@ -95,6 +95,8 @@ class Post(db.Model):
     timestamp = db.Column(db.DateTime, index=True, default=lambda: datetime.now(timezone.utc))
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
     author = so.relationship('User', back_populates='posts')
+    language = db.Column(db.String(5))
+    author = so.relationship('User', back_populates='posts')
 
 
 @login.user_loader

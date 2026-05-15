@@ -34,7 +34,7 @@ moment = Moment(app)
 
 
 def get_locale():
-    return 'es'
+    return 'en'
 
 
 babel = Babel(app, locale_selector=get_locale)
