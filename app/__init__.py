@@ -1,17 +1,20 @@
 import logging
 import os
 from logging.handlers import SMTPHandler, RotatingFileHandler
-
-from flask import Flask
+from flask import Flask, request
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import LoginManager
 from flask_migrate import Migrate
 from flask_mail import Mail
+from flask_moment import Moment
+from flask_babel import Babel, lazy_gettext as _l
+
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'mysecretkey'
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///app.db'
 app.config['POSTS_PER_PAGE'] = 3
+app.config['LANGUAGES'] = ['en', 'es']
 
 # Email config
 app.config['MAIL_SERVER'] = os.environ.get('MAIL_SERVER')
@@ -25,7 +28,17 @@ db = SQLAlchemy(app)
 migrate = Migrate(app, db)
 login = LoginManager(app)
 login.login_view = 'login'
+login.login_message = _l('Please log in to access this page.')
 mail = Mail(app)
+moment = Moment(app)
+
+
+def get_locale():
+    return 'es'
+
+
+babel = Babel(app, locale_selector=get_locale)
+
 
 if not app.debug:
     if app.config['MAIL_SERVER']:
@@ -53,5 +66,6 @@ if not app.debug:
 
     app.logger.setLevel(logging.INFO)
     app.logger.info('Microblog startup')
+
 
 from app import routes, models, errors
