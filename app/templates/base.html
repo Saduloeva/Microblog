@@ -30,17 +30,25 @@
               <a class="nav-link" href="{{ url_for('explore') }}">{{ _('Explore') }}</a>
             </li>
           </ul>
+          {% if g.search_form %}
+          <form class="navbar-form d-flex me-3" method="get"
+                action="{{ url_for('search') }}">
+              <input class="form-control" type="search"
+                     name="q" placeholder="{{ _('Search') }}"
+                     value="{{ g.search_form.q.data or '' }}">
+          </form>
+          {% endif %}
           <ul class="navbar-nav">
             {% if current_user.is_anonymous %}
             <li class="nav-item">
-              <a class="nav-link" href="{{ url_for('login') }}">{{ _('Login') }}</a>
+              <a class="nav-link" href="{{ url_for('auth.login') }}">{{ _('Login') }}</a>
             </li>
             {% else %}
             <li class="nav-item">
               <a class="nav-link" href="{{ url_for('user', username=current_user.username) }}">{{ _('Profile') }}</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="{{ url_for('logout') }}">{{ _('Logout') }}</a>
+              <a class="nav-link" href="{{ url_for('auth.logout') }}">{{ _('Logout') }}</a>
             </li>
             {% endif %}
           </ul>

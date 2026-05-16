@@ -27,7 +27,7 @@ app.config['ADMINS'] = ['your-email@example.com']
 db = SQLAlchemy(app)
 migrate = Migrate(app, db)
 login = LoginManager(app)
-login.login_view = 'login'
+login.login_view = 'auth.login'
 login.login_message = _l('Please log in to access this page.')
 mail = Mail(app)
 moment = Moment(app)
@@ -67,5 +67,10 @@ if not app.debug:
     app.logger.setLevel(logging.INFO)
     app.logger.info('Microblog startup')
 
+from app.errors import bp as errors_bp
+app.register_blueprint(errors_bp)
 
-from app import routes, models, errors
+from app.auth import bp as auth_bp
+app.register_blueprint(auth_bp, url_prefix='/auth')
+
+from app import routes, models
